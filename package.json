@@ -1,0 +1,27 @@
+{
+  "name": "lxc",
+  "version": "0.0.1",
+  "description": "lxc Linux Containers Interface for nodejs",
+  "main": "lxc.js",
+  "dependencies": {
+    "child": "latest"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hugorodrigues/lxc.js"
+  },
+  "keywords": [
+    "lxc",
+    "virtual",
+    "vm",
+    "containers",
+    "dockers",
+    "vps"
+  ],
+  "author": "Hugo Rodrigues",
+  "license": "BSD"
+}
