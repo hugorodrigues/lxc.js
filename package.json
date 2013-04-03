@@ -1,10 +1,12 @@
 {
   "name": "lxc",
-  "version": "0.0.1",
-  "description": "lxc Linux Containers Interface for nodejs",
+  "version": "0.0.2",
+  "description": "Linux containers (LXC) NodeJS wrapper",
   "main": "lxc.js",
   "dependencies": {
-    "child": "latest"
+    "child": "latest",
+    "colors": "latest",
+    "async": "latest"
   },
   "devDependencies": {},
   "scripts": {
