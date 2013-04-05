@@ -8,7 +8,7 @@
 ## API
 
 
-### lxc.create(<name>, <template>, <config>, <cbComplete>, <cbOutputData>)
+### lxc.create(name, template, [config], [cbComplete], [cbOutputData])
 ```js
 lxc.create('example', 'ubuntu', function(error, messages){ 
 	if (error)
@@ -18,32 +18,32 @@ lxc.create('example', 'ubuntu', function(error, messages){
 })
 ```
 
-### lxc.start(<name>, <cbComplete>, <cbOutputData>)
+### lxc.start(name, [cbComplete], [cbOutputData])
 ```js
 lxc.start('example', console.log)
 ```
 
-### lxc.freeze(<name>, <cbComplete>, <cbOutputData>)
+### lxc.freeze(name, [cbComplete], [cbOutputData])
 ```js
 lxc.freeze('example', console.log)
 ```
 
-### lxc.unfreeze(<name>, <cbComplete>, <cbOutputData>)
+### lxc.unfreeze(name, [cbComplete], [cbOutputData])
 ```js
 lxc.unfreeze('example', console.log)
 ```
 
-### lxc.stop(<name>, <cbComplete>, <cbOutputData>)
+### lxc.stop(name, [cbComplete], [cbOutputData])
 ```js
 lxc.stop('example', console.log)
 ```
 
-### lxc.destroy(<name>, <cbComplete>, <cbOutputData>)
+### lxc.destroy(name, [cbComplete], [cbOutputData])
 ```js
 lxc.destroy('example', console.log)
 ```
 
-### lxc.list(<cbComplete>)
+### lxc.list([cbComplete])
 ```js
 lxc.list('example', console.log)
 ```
