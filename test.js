@@ -2,7 +2,7 @@ var async = require('async');
 var colors = require('colors');
 
 var lxc = require('./lxc.js')({
-	sshBind: ['/usr/bin/ssh', '-t', 'lxc']
+	sshBind: ['/usr/bin/ssh', 'lxc']
 });
 
 
@@ -12,7 +12,7 @@ function lxcTest (){
     var args = Array.prototype.slice.call(arguments, 1,-1)
     var cb = Array.prototype.slice.call(arguments, -1)[0]
 
-    args.push(function(data){ process.stdout.write(data) })
+    args.push(function(data){ process.stdout.write(data.grey) })
     args.push(function(error, messages){ cb(); console.log((error) ? 'Ended with error!'.underline.red : '-> OK!'.green, messages) })
 
     lxc[fn].apply(this, args);
@@ -21,7 +21,6 @@ function lxcTest (){
 
 
 var testCreate = [
-
     function(cb){ lxcTest('create', 'vm_test_1', 'ubuntu', {}, cb) },
     function(cb){ lxcTest('create', 'vm_test_2', 'ubuntu', {}, cb) },
     function(cb){ lxcTest('create', 'vm_test_3', 'ubuntu', {}, cb) },
@@ -119,8 +118,8 @@ var testAll = [
     function(cb){ async.parallel(testStop, function(err, results){ cb(null, "Stop 10 vm's") }) },
     function(cb){ setTimeout(function(){ console.log('Pausing...'.yellow); cb(null, "Paused 5seconds...")},5000) },
 
-    //function(cb){ async.parallel(testDestroy, function(err, results){ cb(null, "Destroyed 10 vm's") }) },
-    //function(cb){ setTimeout(function(){ console.log('Pausing...'.yellow); cb(null, "Paused 5seconds...")},5000) },
+    function(cb){ async.parallel(testDestroy, function(err, results){ cb(null, "Destroyed 10 vm's") }) },
+    function(cb){ setTimeout(function(){ console.log('Pausing...'.yellow); cb(null, "Paused 5seconds...")},5000) },
 ];
 
 
@@ -128,9 +127,4 @@ var testAll = [
 async.series(testAll, function(err, results){
     console.log(err, results);
 });
-
-
-
-
-
 

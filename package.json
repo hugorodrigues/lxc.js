@@ -1,21 +1,21 @@
 {
   "name": "lxc",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "Linux containers (LXC) NodeJS wrapper",
+  "homepage": "https://github.com/hugorodrigues/lxc.js",
   "main": "lxc.js",
   "dependencies": {
     "child": "latest",
     "colors": "latest",
     "async": "latest"
   },
-  "devDependencies": {},
-  "scripts": {
-    "test": ""
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hugorodrigues/lxc.js"
+    "url": "https://github.com/hugorodrigues/lxc.js.git"
   },
+  "bugs": {
+    "url": "http://github.com/hugorodrigues/lxc.js/issues"
+  },  
   "keywords": [
     "lxc",
     "virtual",
@@ -24,6 +24,6 @@
     "dockers",
     "vps"
   ],
-  "author": "Hugo Rodrigues",
-  "license": "BSD"
+  "author": "Hugo Rodrigues <hugo@starteffect.com>",
+  "license": "MIT"
 }

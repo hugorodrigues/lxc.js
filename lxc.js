@@ -1,10 +1,8 @@
-
 module.exports = function(config){
 
     var obj = {}
     var child = require('child')
         sshBind = config.sshBind || false
-
 
     //http://stackoverflow.com/questions/10530532/
     function textToArgs(s){
@@ -13,12 +11,10 @@ module.exports = function(config){
         return words
     }
 
-
     var sysExec = function(command, onData, onClose){
 
         onData = onData || function(){}
         onClose = onClose || function(){}
-        
 
         if (sshBind != false)
         {
@@ -30,44 +26,23 @@ module.exports = function(config){
 
         var errors = '';
 
-
-        var x = {
+        child({
             command: runCommand.slice(0,1)[0],
             args: runCommand.slice(1),
             cbStdout: function(data){ onData(''+data) },
             cbStderr: function(data){ errors+=data; onData(''+data) },
-            cbClose: function(exitCode){
-                onClose(exitCode == 0 ? null:exitCode,  errors)
-            },
-        }
-
-        var tmp = child(x).start()
+            cbClose: function(exitCode){ onClose(exitCode == 0 ? null:exitCode,  errors) }
+        }).start()
     }
-
-    obj.execute = function(command, onData, onClose){
-        sysExec(command, onData, onClose);
-    }
-
-
-
-
-
 
 
     obj.create = function(name, template, config, cbComplete, cbData){
-
-        var cmd = 'lxc-create -n '+name+' -t '+template
-
-        sysExec(cmd, cbComplete, cbData);
+        sysExec('lxc-create -n '+name+' -t '+template, cbComplete, cbData);
     }
 
     obj.destroy = function(name, cbComplete, cbData){
         sysExec('lxc-destroy -n '+ name, cbComplete, cbData);
     }
-
-
-
-
 
 
     obj.start = function(name, cbComplete, cbData){
@@ -79,9 +54,6 @@ module.exports = function(config){
     }
 
 
-
-
-
     obj.freeze = function(name, cbComplete, cbData){
         sysExec('lxc-freeze -n '+name, cbComplete, cbData);
     }
@@ -90,15 +62,9 @@ module.exports = function(config){
     }
 
 
-
-
-
-
-    // params = {}
     obj.list = function(cbComplete, cbData){
+
         var output = '';
-        //console.log(arguments);
-            
         sysExec('lxc-list', function(data){output+=data}, function(error){
 
             output = output.split("\n");
@@ -124,8 +90,6 @@ module.exports = function(config){
             cbData(null, result);
         });
     }
-
-
 
 
     return obj;
