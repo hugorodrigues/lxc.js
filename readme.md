@@ -7,48 +7,55 @@
 
 ## API
 
+
+### lxc.create(<name>, <template>, <config>, <cbComplete>, <cbOutputData>)
 ```js
-lxc.method(<params>, <cbOutput>, <cbComplete>)
+lxc.create('example', 'ubuntu', function(error, messages){ 
+	if (error)
+		console.log('Error! '+messages)
+	else
+		console.log('Created!')
+})
 ```
 
-### Create Container
+### lxc.start(<name>, <cbComplete>, <cbOutputData>)
 ```js
-lxc.create({name:'example', template:'ubuntu'})
+lxc.start('example', console.log)
 ```
 
-### Start Container
+### lxc.freeze(<name>, <cbComplete>, <cbOutputData>)
 ```js
-lxc.start({name:'example'})
+lxc.freeze('example', console.log)
 ```
 
-### Freeze Container
+### lxc.unfreeze(<name>, <cbComplete>, <cbOutputData>)
 ```js
-lxc.freeze({name:'example'})
+lxc.unfreeze('example', console.log)
 ```
 
-### Un-Freeze Container
+### lxc.stop(<name>, <cbComplete>, <cbOutputData>)
 ```js
-lxc.unfreeze({name:'example'})
+lxc.stop('example', console.log)
 ```
 
-### Stop Container
+### lxc.destroy(<name>, <cbComplete>, <cbOutputData>)
 ```js
-lxc.stop({name:'example'})
+lxc.destroy('example', console.log)
 ```
 
-### Destroy Container
+### lxc.list(<cbComplete>)
 ```js
-lxc.destroy({name:'example'})
+lxc.list('example', console.log)
 ```
-
 
 ---
 ## License 
 
 (The MIT License)
 
-Copyright (c) 2010-2013 Hugo Rodrigues, StartEffect U. Lda
+Copyright (c) 2010-2013 Hugo Rodrigues, StartEffect
 http://starteffect.com
+http://hugorodrigues.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

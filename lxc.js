@@ -36,8 +36,8 @@ module.exports = function(config){
             args: runCommand.slice(1),
             cbStdout: function(data){ onData(''+data) },
             cbStderr: function(data){ errors+=data; onData(''+data) },
-            cbClose: function(data){
-                onClose(data == 0 ? null:data,  errors)
+            cbClose: function(exitCode){
+                onClose(exitCode == 0 ? null:exitCode,  errors)
             },
         }
 
@@ -54,21 +54,15 @@ module.exports = function(config){
 
 
 
-    // params = {name: 'foobar', template, 'ubuntu', configFile:'/teste', config: {hello:'world', fuck:'yeah'}}
-    obj.create = function(params, cbData, cbComplete){
+    obj.create = function(name, template, config, cbComplete, cbData){
 
-        var cmd = 'lxc-create -n '+ params.name
+        var cmd = 'lxc-create -n '+name+' -t '+template
 
-        if (params.template)
-            cmd += ' -t '+params.template
-
-        sysExec(cmd, cbData, cbComplete);
-
+        sysExec(cmd, cbComplete, cbData);
     }
 
-    // params = {name: 'foobar'}
-    obj.destroy = function(params, cbData, cbComplete){
-        sysExec('lxc-destroy -n '+ params.name, cbData, cbComplete);
+    obj.destroy = function(name, cbComplete, cbData){
+        sysExec('lxc-destroy -n '+ name, cbComplete, cbData);
     }
 
 
@@ -76,27 +70,23 @@ module.exports = function(config){
 
 
 
-    // params = {name: 'foobar'}
-    obj.start = function(params, cbData, cbComplete){
-        sysExec('lxc-start -n '+ params.name+' --daemon ', cbData, cbComplete);
+    obj.start = function(name, cbComplete, cbData){
+        sysExec('lxc-start -n '+name+' --daemon ', cbComplete, cbData);
     }
 
-    // params = {name: 'foobar'}
-    obj.stop = function(params, cbData, cbComplete){
-        sysExec('lxc-stop -n '+ params.name, cbData, cbComplete);
+    obj.stop = function(name, cbComplete, cbData){
+        sysExec('lxc-stop -n '+ name, cbComplete, cbData);
     }
 
 
 
 
 
-    // params = {name: 'foobar'}
-    obj.freeze = function(params, cbData, cbComplete){
-        sysExec('lxc-freeze -n '+ params.name, cbData, cbComplete);
+    obj.freeze = function(name, cbComplete, cbData){
+        sysExec('lxc-freeze -n '+name, cbComplete, cbData);
     }
-    // params = {name: 'foobar'}
-    obj.unfreeze = function(params, cbData, cbComplete){
-        sysExec('lxc-unfreeze -n '+ params.name, cbData, cbComplete);
+    obj.unfreeze = function(name, cbComplete, cbData){
+        sysExec('lxc-unfreeze -n '+name, cbComplete, cbData);
     }
 
 
@@ -105,8 +95,9 @@ module.exports = function(config){
 
 
     // params = {}
-    obj.list = function(params, cbData, cbComplete){
+    obj.list = function(cbComplete, cbData){
         var output = '';
+        //console.log(arguments);
             
         sysExec('lxc-list', function(data){output+=data}, function(error){
 
@@ -130,7 +121,7 @@ module.exports = function(config){
                         result[actual].push(content); 
             }
 
-            cbComplete(null, result);
+            cbData(null, result);
         });
     }
 
