@@ -45,14 +45,27 @@ module.exports = function(config){
     }
 
 
-    obj.start = function(name, cbComplete, cbData){
-        sysExec('lxc-start -n '+name+' --daemon ', cbComplete, cbData);
-    }
+    obj.start = function(name, cb){
+        var output = '';
+        sysExec('lxc-start -n ' + name + ' -d',
+            function(data) {
+                output += data;
+            }, function(error) {
+              cb(error, output);
+            }
+        );
+    };
 
-    obj.stop = function(name, cbComplete, cbData){
-        sysExec('lxc-stop -n '+ name, cbComplete, cbData);
-    }
-
+    obj.stop = function(name, cb){
+        var output = '';
+        sysExec('lxc-stop -n ' + name,
+            function(data) {
+              output += data;
+            }, function(error) {
+              cb(error, output);
+            }
+        );
+    };
 
     obj.freeze = function(name, cbComplete, cbData){
         sysExec('lxc-freeze -n '+name, cbComplete, cbData);
