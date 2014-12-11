@@ -50,7 +50,11 @@ module.exports = function(config){
         sysExec('lxc-start -n ' + name + ' -d',
             function(data) {
                 output += data;
-            }, function(error) {
+            }, function() {
+              var error;
+              if (output.indexOf('no configuration file') >= 0) {
+                  error = new Error("Container does not exist");
+              }
               cb(error, output);
             }
         );
