@@ -7,7 +7,7 @@ module.exports = function(config){
     //http://stackoverflow.com/questions/10530532/
     function textToArgs(s){
         var words = [];
-        s.replace(/"([^"]*)"|'([^']*)'|(\S+)/g,function(g0,g1,g2,g3){ words.push(g1 || g2 || g3 || '')});            
+        s.replace(/"([^"]*)"|'([^']*)'|(\S+)/g,function(g0,g1,g2,g3){ words.push(g1 || g2 || g3 || '')});
         return words
     }
 
