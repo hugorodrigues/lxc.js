@@ -99,7 +99,7 @@ module.exports = function(config){
                         }
                     }
                 }
-                cb(containers);
+                cb(error, containers);
             }
         );
     }
