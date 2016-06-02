@@ -9,6 +9,14 @@
 var lxc = require('lxc')();
 ```
 
+or
+
+```js
+var lxc = require('./lxc.js')({
+	sshBind: ['/usr/bin/ssh', 'lxc']
+});
+```
+
 ## API
 
 
