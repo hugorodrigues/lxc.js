@@ -1,8 +1,9 @@
 module.exports = function(config){
 
-    var obj = {}
-    var child = require('child')
-        sshBind = config.sshBind || false
+    var obj = {};
+    var child = require('child'),
+        config = config || {},
+        sshBind = config.sshBind || false;
 
     //http://stackoverflow.com/questions/10530532/
     function textToArgs(s){
