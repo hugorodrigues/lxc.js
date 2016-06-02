@@ -61,6 +61,68 @@ module.exports = function(config){
         sysExec('lxc-unfreeze -n '+name, cbComplete, cbData);
     }
 
+    /**
+     * creates a new snapshot
+     * @param name
+     * @param cbComplete
+     * @param cbData
+     */
+    obj.createSnapshot = function(name, cbComplete, cbData){
+        sysExec('lxc-snapshot -n '+name, cbComplete, cbData);
+    }
+
+    /**
+     * deletes a snapshot
+     * @param name
+     * @param snapshotName
+     * @param cbComplete
+     * @param cbData
+     */
+    obj.deleteSnapshot = function(name, snapshotName, cbComplete, cbData){
+        sysExec('lxc-snapshot -n '+name+' -d '+snapshotName, cbComplete, cbData);
+    }
+
+    /**
+     * restores a snapshot
+     * @param name
+     * @param snapshotName
+     * @param newName [optional] name of restored lxc.
+     * @param cbComplete
+     * @param cbData
+     */
+    obj.restoreSnapshot  = function(name, snapshotName, newName, cbComplete, cbData){
+        if(typeof newName === 'function'){
+            cbData = cbComplete;
+            cbComplete = newName;
+            newName = name;
+        }
+        sysExec('lxc-snapshot -n '+name+' -r '+snapshotName+" -N "+newName, cbComplete, cbData);
+    }
+
+    /**
+     * Lists all snapshots
+     * @param name
+     * @param cbComplete
+     * @param cbData
+     */
+    obj.listSnapshots  = function(name, cbComplete, cbData){
+        var output = '';
+        sysExec('lxc-snapshot -L -n '+name, function(data){output+=data}, function(error){
+            output = output.split("\n");
+
+            var ret = [];
+            output.forEach(function(line){
+                line = line.split(" ");
+                ret.push({
+                   name: line[0],
+                   dir: line[1],
+                   date: line[2]+" "+line[3]
+                });
+            });
+
+            return ret;
+        });
+    }
 
     obj.list = function(cbComplete, cbData){
 
