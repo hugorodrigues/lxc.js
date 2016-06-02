@@ -4,6 +4,10 @@
 - Designed to work locally and remotely (ssh)
 - Doesn't use any kind of storage/database
 
+## Usage
+```js
+var lxc = require('lxc')();
+```
 
 ## API
 
