@@ -8,7 +8,7 @@ module.exports = function(config){
     //http://stackoverflow.com/questions/10530532/
     function textToArgs(s){
         var words = [];
-        s.replace(/"([^"]*)"|'([^']*)'|(\S+)/g,function(g0,g1,g2,g3){ words.push(g1 || g2 || g3 || '')});            
+        s.replace(/"([^"]*)"|'([^']*)'|(\S+)/g,function(g0,g1,g2,g3){ words.push(g1 || g2 || g3 || '')});
         return words
     }
 
@@ -46,14 +46,31 @@ module.exports = function(config){
     }
 
 
-    obj.start = function(name, cbComplete, cbData){
-        sysExec('lxc-start -n '+name+' --daemon ', cbComplete, cbData);
-    }
+    obj.start = function(name, cb){
+        var output = '';
+        sysExec('lxc-start -n ' + name + ' -d',
+            function(data) {
+                output += data;
+            }, function() {
+              var error;
+              if (output.indexOf('no configuration file') >= 0) {
+                  error = new Error("Container does not exist");
+              }
+              cb(error, output);
+            }
+        );
+    };
 
-    obj.stop = function(name, cbComplete, cbData){
-        sysExec('lxc-stop -n '+ name, cbComplete, cbData);
-    }
-
+    obj.stop = function(name, cb){
+        var output = '';
+        sysExec('lxc-stop -n ' + name,
+            function(data) {
+              output += data;
+            }, function(error) {
+              cb(error, output);
+            }
+        );
+    };
 
     obj.freeze = function(name, cbComplete, cbData){
         sysExec('lxc-freeze -n '+name, cbComplete, cbData);
@@ -125,35 +142,30 @@ module.exports = function(config){
         });
     }
 
-    obj.list = function(cbComplete, cbData){
-
+    obj.list = function(cb){
         var output = '';
-        sysExec('lxc-list', function(data){output+=data}, function(error){
+        sysExec('lxc-ls -f',
+            function(data) {
+                output += data;
+            }, function(error){
+                var containers = {};
+                output = output.split("\n");
+                for (i in output) {
+                    var content = output[i].trim();
 
-            output = output.split("\n");
-
-            var actual = false;            
-            var result = {
-                running: [],
-                frozen: [],
-                stopped: []
+                    if (content.indexOf('RUNNING') >= 0 ||
+                            content.indexOf('FROZEN') >= 0 ||
+                            content.indexOf('STOPPED') >= 0) {
+                        vals = content.split(/\s+/gi);
+                        if (vals.length >= 2) {
+                            containers[vals[0]] = vals[1];
+                        }
+                    }
+                }
+                cb(error, containers);
             }
-
-            for (i in output)
-            {
-                var content = output[i].trim();
-
-                if (content == 'RUNNING' || content == 'FROZEN' || content == 'STOPPED')
-                    actual = content.toLowerCase()
-                else 
-                    if (actual != false && content != '')
-                        result[actual].push(content); 
-            }
-
-            cbData(null, result);
-        });
+        );
     }
-
 
     return obj;
 }
