@@ -4,6 +4,18 @@
 - Designed to work locally and remotely (ssh)
 - Doesn't use any kind of storage/database
 
+## Usage
+```js
+var lxc = require('lxc')();
+```
+
+or
+
+```js
+var lxc = require('./lxc.js')({
+	sshBind: ['/usr/bin/ssh', 'lxc']
+});
+```
 
 ## API
 
@@ -47,6 +59,30 @@ lxc.destroy('example', console.log)
 ```js
 lxc.list('example', console.log)
 ```
+
+### lxc.createSnapshot(name, [cbComplete], [cbOutputData])
+```js
+lxc.createSnapshot('lxc', console.log)
+```
+
+### lxc.deleteSnapshot(name, snapshotName, [cbComplete], [cbOutputData])
+```js
+lxc.deleteSnapshot('lxc', 'snap_1')
+```
+
+### lxc.restoreSnapshotSnapshot(name, snapshotName, [newName], [cbComplete], [cbOutputData])
+```js
+lxc.deleteSnapshot('lxc', 'snap_1', 'new_lxc')
+```
+
+### lxc.restoreSnapshotSnapshot(name, [cbComplete], [cbOutputData])
+```js
+lxc.listSnapshots('lxc', console.log)
+```
+
+
+
+
 
 ---
 ## License 

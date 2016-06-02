@@ -1,13 +1,14 @@
 module.exports = function(config){
 
-    var obj = {}
-    var child = require('child')
-        sshBind = config.sshBind || false
+    var obj = {};
+    var child = require('child'),
+        config = config || {},
+        sshBind = config.sshBind || false;
 
     //http://stackoverflow.com/questions/10530532/
     function textToArgs(s){
         var words = [];
-        s.replace(/"([^"]*)"|'([^']*)'|(\S+)/g,function(g0,g1,g2,g3){ words.push(g1 || g2 || g3 || '')});            
+        s.replace(/"([^"]*)"|'([^']*)'|(\S+)/g,function(g0,g1,g2,g3){ words.push(g1 || g2 || g3 || '')});
         return words
     }
 
@@ -45,14 +46,31 @@ module.exports = function(config){
     }
 
 
-    obj.start = function(name, cbComplete, cbData){
-        sysExec('lxc-start -n '+name+' --daemon ', cbComplete, cbData);
-    }
+    obj.start = function(name, cb){
+        var output = '';
+        sysExec('lxc-start -n ' + name + ' -d',
+            function(data) {
+                output += data;
+            }, function() {
+              var error;
+              if (output.indexOf('no configuration file') >= 0) {
+                  error = new Error("Container does not exist");
+              }
+              cb(error, output);
+            }
+        );
+    };
 
-    obj.stop = function(name, cbComplete, cbData){
-        sysExec('lxc-stop -n '+ name, cbComplete, cbData);
-    }
-
+    obj.stop = function(name, cb){
+        var output = '';
+        sysExec('lxc-stop -n ' + name,
+            function(data) {
+              output += data;
+            }, function(error) {
+              cb(error, output);
+            }
+        );
+    };
 
     obj.freeze = function(name, cbComplete, cbData){
         sysExec('lxc-freeze -n '+name, cbComplete, cbData);
@@ -61,36 +79,93 @@ module.exports = function(config){
         sysExec('lxc-unfreeze -n '+name, cbComplete, cbData);
     }
 
+    /**
+     * creates a new snapshot
+     * @param name
+     * @param cbComplete
+     * @param cbData
+     */
+    obj.createSnapshot = function(name, cbComplete, cbData){
+        sysExec('lxc-snapshot -n '+name, cbComplete, cbData);
+    }
 
-    obj.list = function(cbComplete, cbData){
+    /**
+     * deletes a snapshot
+     * @param name
+     * @param snapshotName
+     * @param cbComplete
+     * @param cbData
+     */
+    obj.deleteSnapshot = function(name, snapshotName, cbComplete, cbData){
+        sysExec('lxc-snapshot -n '+name+' -d '+snapshotName, cbComplete, cbData);
+    }
 
+    /**
+     * restores a snapshot
+     * @param name
+     * @param snapshotName
+     * @param newName [optional] name of restored lxc.
+     * @param cbComplete
+     * @param cbData
+     */
+    obj.restoreSnapshot  = function(name, snapshotName, newName, cbComplete, cbData){
+        if(typeof newName === 'function'){
+            cbData = cbComplete;
+            cbComplete = newName;
+            newName = name;
+        }
+        sysExec('lxc-snapshot -n '+name+' -r '+snapshotName+" -N "+newName, cbComplete, cbData);
+    }
+
+    /**
+     * Lists all snapshots
+     * @param name
+     * @param cbComplete
+     * @param cbData
+     */
+    obj.listSnapshots  = function(name, cbComplete, cbData){
         var output = '';
-        sysExec('lxc-list', function(data){output+=data}, function(error){
-
+        sysExec('lxc-snapshot -L -n '+name, function(data){output+=data}, function(error){
             output = output.split("\n");
 
-            var actual = false;            
-            var result = {
-                running: [],
-                frozen: [],
-                stopped: []
-            }
+            var ret = [];
+            output.forEach(function(line){
+                line = line.split(" ");
+                ret.push({
+                   name: line[0],
+                   dir: line[1],
+                   date: line[2]+" "+line[3]
+                });
+            });
 
-            for (i in output)
-            {
-                var content = output[i].trim();
-
-                if (content == 'RUNNING' || content == 'FROZEN' || content == 'STOPPED')
-                    actual = content.toLowerCase()
-                else 
-                    if (actual != false && content != '')
-                        result[actual].push(content); 
-            }
-
-            cbData(null, result);
+            return ret;
         });
     }
 
+    obj.list = function(cb){
+        var output = '';
+        sysExec('lxc-ls -f',
+            function(data) {
+                output += data;
+            }, function(error){
+                var containers = {};
+                output = output.split("\n");
+                for (i in output) {
+                    var content = output[i].trim();
+
+                    if (content.indexOf('RUNNING') >= 0 ||
+                            content.indexOf('FROZEN') >= 0 ||
+                            content.indexOf('STOPPED') >= 0) {
+                        vals = content.split(/\s+/gi);
+                        if (vals.length >= 2) {
+                            containers[vals[0]] = vals[1];
+                        }
+                    }
+                }
+                cb(error, containers);
+            }
+        );
+    }
 
     return obj;
 }
