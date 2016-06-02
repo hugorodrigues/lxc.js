@@ -1,6 +1,6 @@
 {
   "name": "lxc",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Linux containers (LXC) NodeJS wrapper",
   "homepage": "https://github.com/hugorodrigues/lxc.js",
   "main": "lxc.js",
@@ -15,7 +15,7 @@
   },
   "bugs": {
     "url": "http://github.com/hugorodrigues/lxc.js/issues"
-  },  
+  },
   "keywords": [
     "lxc",
     "virtual",
@@ -25,5 +25,12 @@
     "vps"
   ],
   "author": "Hugo Rodrigues <hugo@starteffect.com>",
+  "contributors": [
+    {
+      "name": "Friedemann Stoffregen",
+      "email": "stoffregen@mankind-software.de",
+      "url": "https://www.bananasoft.org/"
+    }
+  ],
   "license": "MIT"
 }
