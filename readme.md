@@ -56,10 +56,23 @@ lxc.destroy('example', console.log)
 
 ### lxc.list([cbComplete])
 ```js
-lxc.list('example', console.log)
+lxc.list(console.log)
+```
+
+example return value:
+
+```js
+{ '57330c59710e684f568cc0ab_1':
+   { name: '57330c59710e684f568cc0ab_1',
+     state: 'RUNNING',
+     autostart: '0',
+     groups: '-',
+     ipv4: '10.0.3.232',
+     ipv6: '-' } }```
 ```
 
 ### lxc.createSnapshot(name, [cbComplete], [cbOutputData])
+
 ```js
 lxc.createSnapshot('lxc', console.log)
 ```
