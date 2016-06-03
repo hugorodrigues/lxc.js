@@ -151,7 +151,6 @@ module.exports = function(config){
     obj.attach = function(name, command, cbComplete) {
         var output = '';
         sysExec('lxc-attach -n '+name+' -- '+command, function(data){output+=data}, function(error){
-            output = output.replace(/\\n/g, "\n");
             cbComplete(error, output);
         });
     }
