@@ -19,7 +19,6 @@ var lxc = require('./lxc.js')({
 
 ## API
 
-
 ### lxc.create(name, template, [config], [cbComplete], [cbOutputData])
 ```js
 lxc.create('example', 'ubuntu', function(error, messages){ 
@@ -70,18 +69,20 @@ lxc.createSnapshot('lxc', console.log)
 lxc.deleteSnapshot('lxc', 'snap_1')
 ```
 
-### lxc.restoreSnapshotSnapshot(name, snapshotName, [newName], [cbComplete], [cbOutputData])
+### lxc.restoreSnapshot(name, snapshotName, [newName], [cbComplete], [cbOutputData])
 ```js
 lxc.deleteSnapshot('lxc', 'snap_1', 'new_lxc')
 ```
 
-### lxc.restoreSnapshotSnapshot(name, [cbComplete], [cbOutputData])
+### lxc.listSnapshots(name, [cbComplete], [cbOutputData])
 ```js
 lxc.listSnapshots('lxc', console.log)
 ```
 
-
-
+### lxc.attach(name, command, [cbComplete])
+```js
+lxc.attach('lxc', 'ls -la', console.log)
+```
 
 
 ---
