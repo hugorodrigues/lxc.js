@@ -19,7 +19,6 @@ var lxc = require('./lxc.js')({
 
 ## API
 
-
 ### lxc.create(name, template, [config], [cbComplete], [cbOutputData])
 ```js
 lxc.create('example', 'ubuntu', function(error, messages){ 
@@ -57,10 +56,23 @@ lxc.destroy('example', console.log)
 
 ### lxc.list([cbComplete])
 ```js
-lxc.list('example', console.log)
+lxc.list(console.log)
+```
+
+example return value:
+
+```js
+{ '57330c59710e684f568cc0ab_1':
+   { name: '57330c59710e684f568cc0ab_1',
+     state: 'RUNNING',
+     autostart: '0',
+     groups: '-',
+     ipv4: '10.0.3.232',
+     ipv6: '-' } }```
 ```
 
 ### lxc.createSnapshot(name, [cbComplete], [cbOutputData])
+
 ```js
 lxc.createSnapshot('lxc', console.log)
 ```
@@ -70,18 +82,20 @@ lxc.createSnapshot('lxc', console.log)
 lxc.deleteSnapshot('lxc', 'snap_1')
 ```
 
-### lxc.restoreSnapshotSnapshot(name, snapshotName, [newName], [cbComplete], [cbOutputData])
+### lxc.restoreSnapshot(name, snapshotName, [newName], [cbComplete], [cbOutputData])
 ```js
 lxc.deleteSnapshot('lxc', 'snap_1', 'new_lxc')
 ```
 
-### lxc.restoreSnapshotSnapshot(name, [cbComplete], [cbOutputData])
+### lxc.listSnapshots(name, [cbComplete], [cbOutputData])
 ```js
 lxc.listSnapshots('lxc', console.log)
 ```
 
-
-
+### lxc.attach(name, command, [cbComplete])
+```js
+lxc.attach('lxc', 'ls -la', console.log)
+```
 
 
 ---
