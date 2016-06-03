@@ -97,6 +97,10 @@ lxc.listSnapshots('lxc', console.log)
 lxc.attach('lxc', 'ls -la', console.log)
 ```
 
+### lxc.getIP = function(name, [cbComplete])
+```js
+lxc.getIP('lxc', console.log)
+```
 
 ---
 ## License 

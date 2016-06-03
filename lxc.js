@@ -143,6 +143,18 @@ module.exports = function(config){
     }
 
     /**
+     * returns machine's ip
+     * @param name
+     * @param cbComplete
+     */
+    obj.getIP = function(name, cbComplete) {
+        var output = '';
+        sysExec('lxc-info -H -i -n '+name, function(data){output+=data}, function(error){
+            cbComplete(error, output);
+        });
+    }
+
+    /**
      * Wrapper for lxc-attach command
      * @param name
      * @param command
