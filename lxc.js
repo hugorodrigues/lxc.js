@@ -172,6 +172,7 @@ module.exports = function(config){
                         vals = content.split(/\s+/gi);
                         if (vals.length >= 2) {
                             containers[vals[0]] = {
+                                "name": vals[0],
                                 "state": vals[1],
                                 "autostart": vals[2],
                                 "groups": vals[3],
