@@ -142,6 +142,31 @@ module.exports = function(config){
         });
     }
 
+    /**
+     * returns machine's ip
+     * @param name
+     * @param cbComplete
+     */
+    obj.getIP = function(name, cbComplete) {
+        var output = '';
+        sysExec('lxc-info -H -i -n '+name, function(data){output+=data}, function(error){
+            cbComplete(error, output);
+        });
+    }
+
+    /**
+     * Wrapper for lxc-attach command
+     * @param name
+     * @param command
+     * @param cbComplete
+     */
+    obj.attach = function(name, command, cbComplete) {
+        var output = '';
+        sysExec('lxc-attach -n '+name+' -- '+command, function(data){output+=data}, function(error){
+            cbComplete(error, output);
+        });
+    }
+
     obj.list = function(cb){
         var output = '';
         sysExec('lxc-ls -f',
@@ -158,7 +183,14 @@ module.exports = function(config){
                             content.indexOf('STOPPED') >= 0) {
                         vals = content.split(/\s+/gi);
                         if (vals.length >= 2) {
-                            containers[vals[0]] = vals[1];
+                            containers[vals[0]] = {
+                                "name": vals[0],
+                                "state": vals[1],
+                                "autostart": vals[2],
+                                "groups": vals[3],
+                                "ipv4": vals[4],
+                                "ipv6": vals[5]
+                            };
                         }
                     }
                 }

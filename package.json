@@ -1,6 +1,6 @@
 {
   "name": "lxc",
-  "version": "0.0.6",
+  "version": "0.1.1",
   "description": "Linux containers (LXC) NodeJS wrapper",
   "homepage": "https://github.com/hugorodrigues/lxc.js",
   "main": "lxc.js",
