@@ -84,7 +84,7 @@ lxc.deleteSnapshot('lxc', 'snap_1')
 
 ### lxc.restoreSnapshot(name, snapshotName, [newName], [cbComplete], [cbOutputData])
 ```js
-lxc.deleteSnapshot('lxc', 'snap_1', 'new_lxc')
+lxc.restoreSnapshot('lxc', 'snap_1', 'new_lxc')
 ```
 
 ### lxc.listSnapshots(name, [cbComplete], [cbOutputData])
